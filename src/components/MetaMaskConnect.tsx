@@ -28,6 +28,12 @@ const MetaMaskConnect = () => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    // Restore the last connected accounts if they were saved previously.
+    if (localStorage.getItem("ethAccount") && localStorage.getItem("solAccount")) {
+      setEthAccount(localStorage.getItem("ethAccount") || null)
+      setSolAccount(localStorage.getItem("solAccount") || null)
+    }
+
     // Create the multichain client once on the client side.
     const init = async () => {
       try {
@@ -46,11 +52,6 @@ const MetaMaskConnect = () => {
           },
         })
         setClient(c)
-        // Restore the last connected accounts if they were saved previously.
-        if (client) {
-          setEthAccount(localStorage.getItem("ethAccount") || null)
-          setSolAccount(localStorage.getItem("solAccount") || null)
-        }
       } catch (err) {
         console.error(err)
       }
@@ -133,8 +134,10 @@ const MetaMaskConnect = () => {
           {loading ? "Disconnecting MetaMask..." : "Disconnect MetaMask"}
         </button>
 
-        <p className="text-sm text-gray-300">ETH: {ethAccount}</p>
-        <p className="text-sm text-gray-300">SOL: {solAccount}</p>
+        <div className="overflow-x-auto rounded-lg border border-gray-700 bg-gray-800 p-4">
+          <p className="text-sm text-gray-300">ETH: {ethAccount}</p>
+          <p className="text-sm text-gray-300">SOL: {solAccount}</p>
+        </div>
       </div>
     )
   }
@@ -151,8 +154,10 @@ const MetaMaskConnect = () => {
         {loading ? "Connecting MetaMask..." : "Connect MetaMask"}
       </button>
 
-      {ethAccount && <p className="text-sm text-gray-300">ETH: {ethAccount}</p>}
-      {solAccount && <p className="text-sm text-gray-300">SOL: {solAccount}</p>}
+      <div className="overflow-x-auto rounded-lg border border-gray-700 bg-gray-800 p-4">
+        {ethAccount && <p className="text-sm text-gray-300">ETH: {ethAccount}</p>}
+        {solAccount && <p className="text-sm text-gray-300">SOL: {solAccount}</p>}
+      </div>
     </div>
   )
 }
