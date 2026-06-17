@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "nodemon server/server.js | npm run dev",
     "lint": "eslint",
-    "prepare": "nodemon server/server.js | npm run dev"
+    "prepare": "npm run build"
   },
   "dependencies": {
     "@apiwizards/auth-middleware": "^5.1.1",
