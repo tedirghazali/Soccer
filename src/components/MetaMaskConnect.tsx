@@ -6,14 +6,17 @@ import { Wallet } from "lucide-react"
 
 type MultichainClient = Awaited<ReturnType<typeof createMultichainClient>>
 
+// Minimal shape for the session data returned by the MetaMask multichain provider.
 type SessionAccount = {
   address: string
 }
 
+// A network scope can contain one or more accounts.
 type SessionScope = {
   accounts?: SessionAccount[]
 }
 
+// Only the fields used by this component are modeled here.
 type SessionData = {
   sessionScopes?: Record<string, SessionScope>
 }
@@ -25,6 +28,7 @@ const MetaMaskConnect = () => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    // Create the multichain client once on the client side.
     const init = async () => {
       try {
         const c = await createMultichainClient({
@@ -42,6 +46,7 @@ const MetaMaskConnect = () => {
           },
         })
         setClient(c)
+        // Restore the last connected accounts if they were saved previously.
         if (client) {
           setEthAccount(localStorage.getItem("ethAccount") || null)
           setSolAccount(localStorage.getItem("solAccount") || null)
@@ -53,6 +58,7 @@ const MetaMaskConnect = () => {
     init()
   }, [])
 
+  // Ask MetaMask to connect to the supported EVM and Solana networks.
   const handleMetaMaskConnect = async () => {
     if (!client) return
     try {
@@ -65,6 +71,7 @@ const MetaMaskConnect = () => {
         ],
         []
       )
+      // Read the active session and extract the first account for each chain.
       const session = (await client.provider.getSession()) as SessionData
       const eth = session.sessionScopes?.["eip155:1"]?.accounts ?? []
       const sol =
@@ -75,6 +82,8 @@ const MetaMaskConnect = () => {
       localStorage.setItem("ethAccount", eth[0]?.address ?? eth[0] ?? "")
       localStorage.setItem("solAccount", sol[0]?.address ?? sol[0] ?? "")
       alert(`Sign in to JP Soccer with ${eth[0]?.address ?? eth[0] ?? sol[0]?.address ?? sol[0] ?? "unknown account"}`)
+
+      // The session data structure can vary based on the provider and configuration.
       //console.log(eth) => Array [ "eip155:1:0xf01f9ab8de65d3916a707eebfe4e0d71cf4e3d4f" ]
 
       //console.log(sol) => Array [ "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp:GLh4iLkDaGvDW2eyjHWKTerxJbq7f5myvsC88tUmJVMk" ]
@@ -86,6 +95,7 @@ const MetaMaskConnect = () => {
     }
   }
 
+  // Disconnect the wallet session and clear any cached account state.
   const handleMetaMaskDisconnect = async () => {
     if (!client) return
     try {
@@ -109,7 +119,8 @@ const MetaMaskConnect = () => {
     window.open("https://walletconnect.com/", "_blank", "noopener,noreferrer")
   }*/
 
-  if(ethAccount && solAccount) {
+  // Once both accounts are available, show the disconnect state.
+  if (ethAccount && solAccount) {
     return (
       <div className="mt-4 space-y-3">
         <button
