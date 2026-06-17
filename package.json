@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@apiwizards/auth-middleware": "^5.1.1",
+    "@metamask/connect-multichain": "^1.1.0",
     "@stripe/stripe-js": "^7.8.0",
     "@types/node": "^20.6.3",
     "@types/react": "^18.2.22",

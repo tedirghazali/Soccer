@@ -20,8 +20,10 @@ import {
   Phone,
   Mail,
   ShoppingBag,
+  Wallet,
 } from "lucide-react";
 import Link from "next/link";
+import MetaMaskConnect from "@/components/MetaMaskConnect";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -448,6 +450,14 @@ export default function CheckoutPage() {
                   </>
                 )}
               </button>
+
+              <div className="mt-4 rounded-2xl border border-gray-700 bg-gray-900/70 p-4">
+                <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-200">
+                  <Wallet className="h-4 w-4 text-yellow-200" />
+                  Wallet options
+                </div>
+                <MetaMaskConnect />
+              </div>
 
               {/* Trust Indicators */}
               <div className="mt-6 space-y-3">
